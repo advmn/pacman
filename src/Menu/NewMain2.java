@@ -90,20 +90,22 @@ public class NewMain2 {
                 przyciskStart.addActionListener(e1 -> {
                     int liczbaWierszy = 0;
                     int liczbaKolumn = 0;
-                    try {
-                        liczbaWierszy = Integer.parseInt(poleWierszy.getText());
-                        liczbaKolumn = Integer.parseInt(poleKolumn.getText());
-                    } catch (NumberFormatException ignored) {
 
-                    }
+                    liczbaWierszy = Integer.parseInt(poleWierszy.getText());
+                    liczbaKolumn = Integer.parseInt(poleKolumn.getText());
+
 
                     if (liczbaWierszy >= 10 && liczbaWierszy <= 100 && liczbaKolumn >= 10 && liczbaKolumn <= 100) {
                         oknoWyboruRozmiaru.dispose();
 
+                        Pacman pacman = new Pacman(liczbaWierszy / 2, liczbaKolumn / 2, 20, 20);
 
                         JFrame oknoGry = new JFrame("Gra Pacman");
+                        oknoGry.setLayout(null);
                         oknoGry.setSize(liczbaKolumn * 10, liczbaWierszy * 10);
                         oknoGry.getContentPane().setBackground(kolorTla);
+                        oknoGry.add(pacman);
+                        oknoGry.addKeyListener(pacman);
 
                         oknoGry.setVisible(true);
                     } else {
