@@ -54,7 +54,6 @@ public class Pacman extends JPanel implements KeyListener {
                 break;
         }
         setBounds(x, y, width, height);
-//        repaint();
     }
 
     @Override
