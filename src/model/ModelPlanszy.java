@@ -5,12 +5,12 @@ import javax.swing.table.AbstractTableModel;
 
 public class ModelPlanszy extends AbstractTableModel {
 
-    JComponent[][] rows;
+    ImageIcon[][] rows;
     private int wiersze;
     private int kolumny;
 
     public ModelPlanszy(int wiersze, int kolumny) {
-        rows = new JComponent[wiersze][kolumny];
+        rows = new ImageIcon[wiersze][kolumny];
         this.wiersze = wiersze;
         this.kolumny = kolumny;
     }
@@ -32,11 +32,17 @@ public class ModelPlanszy extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        rows[rowIndex][columnIndex] = (JComponent) aValue;
+        rows[rowIndex][columnIndex] = (ImageIcon) aValue;
+        fireTableCellUpdated(rowIndex, columnIndex);
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return true;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return ImageIcon.class;
     }
 }

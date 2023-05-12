@@ -2,6 +2,8 @@ package Menu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 public class MenuRozmiaru {
     private JFrame oknoWyboruRozmiaru;
@@ -49,7 +51,13 @@ public class MenuRozmiaru {
         oknoWyboruRozmiaru.setVisible(true);
 
         przyciskStart.addActionListener(e1 -> {
-            Gra gra = new Gra(poleWierszy, poleKolumn, oknoWyboruRozmiaru);
+            try {
+                Gra gra = new Gra(poleWierszy, poleKolumn, oknoWyboruRozmiaru);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 }

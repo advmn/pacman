@@ -5,46 +5,43 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.MalformedURLException;
 
-public class Pacman extends JPanel implements KeyListener {
+public class Pacman extends ImageIcon implements KeyListener {
 
     private int wiersz;
     private int kolumna;
-    private final int width;
-    private final int height;
 
-    private DefaultTableModel modelTabeli;
-
-    public Pacman(int wiersz, int kolumna, int width, int height) {
+    public Pacman(File image, int wiersz, int kolumna) throws MalformedURLException {
+        super(image.toURL());
         this.wiersz = wiersz;
         this.kolumna = kolumna;
-        this.width = width;
-        this.height = height;
-        setBackground(Color.YELLOW);
-        setVisible(true);
-    }
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.WHITE);
-        g.fillRect(wiersz, kolumna, width, height);
     }
 
-    public int getX() {
+    public int getWiersz() {
         return wiersz;
     }
 
-    public int getY() {
+    public int getKolumna() {
         return kolumna;
     }
 
+    public void setWiersz(int wiersz) {
+        this.wiersz = wiersz;
+    }
+
+    public void setKolumna(int kolumna) {
+        this.kolumna = kolumna;
+    }
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
 
     }
 
-    @Override
+//    @Override
     public void keyPressed(KeyEvent keyEvent) {
         int step = 3;
         switch (keyEvent.getKeyCode()) {
@@ -53,7 +50,7 @@ public class Pacman extends JPanel implements KeyListener {
             case KeyEvent.VK_LEFT -> wiersz -= step;
             case KeyEvent.VK_RIGHT -> wiersz += step;
         }
-        setBounds(wiersz, kolumna, width, height);
+//        setBounds(wiersz, kolumna, width, height);
     }
 
     @Override
