@@ -25,12 +25,7 @@ public class Plansza extends JTable implements KeyListener {
         this.pacman = pacman;
         modelPlanszy = new ModelPlanszy(szerokosc, wysokosc);
         setModel(modelPlanszy);
-
-//        setShowGrid(true);
-//        setGridColor(Color.BLUE);
-//        setIntercellSpacing(new Dimension(0, 0));
         setTableHeader(null);
-
 
         setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
