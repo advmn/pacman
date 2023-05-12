@@ -3,13 +3,13 @@ package Menu;
 import javax.swing.*;
 import java.awt.*;
 
-public class Gra extends JTable{
+public class Gra extends JFrame {
     private int liczbaWierszy;
     private int liczbaKolumn;
     private Dimension screenSize;
-    private JFrame oknoGry;
 
-    Gra(JTextField poleWierszy, JTextField poleKolumn, JFrame oknoWyboruRozmiaru){
+    Gra(JTextField poleWierszy, JTextField poleKolumn, JFrame oknoWyboruRozmiaru) {
+        setName("Gra pacman");
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         liczbaWierszy = Integer.parseInt(poleWierszy.getText());
         liczbaKolumn = Integer.parseInt(poleKolumn.getText());
@@ -17,22 +17,16 @@ public class Gra extends JTable{
         if (liczbaWierszy >= 10 && liczbaWierszy <= 100 && liczbaKolumn >= 10 && liczbaKolumn <= 100) {
             oknoWyboruRozmiaru.dispose();
 
-            Pacman pacman = new Pacman(liczbaWierszy / 2, liczbaKolumn / 2, 20, 20);
+            Pacman pacman = new Pacman(50, 50, 10, 10);
             Plansza plansza = new Plansza(liczbaKolumn, liczbaWierszy);
+            plansza.setValueAt(pacman, liczbaWierszy / 2, liczbaKolumn / 2);
+
+            setLayout(null);
+            setBounds(0, 0, liczbaWierszy*11, liczbaKolumn*11);
+            getContentPane().setBackground(new Color(0, 0, 0));
             add(plansza);
-
-
-            this.oknoGry = new JFrame("Gra Pacman");
-            oknoGry.setLayout(null);
-            oknoGry.setSize(liczbaKolumn * 10, liczbaWierszy * 10);
-            oknoGry.setBounds((screenSize.width - oknoGry.getWidth()) / 2, (screenSize.height - oknoGry.getHeight()) / 2, oknoGry.getWidth(), oknoGry.getHeight());
-            oknoGry.getContentPane().setBackground(new Color(0, 0, 0));
-            oknoGry.add(pacman);
-            oknoGry.addKeyListener(pacman);
-            oknoGry.setVisible(true);
-
-
-
+//            oknoGry.addKeyListener(pacman);
+            setVisible(true);
 
 
         } else {

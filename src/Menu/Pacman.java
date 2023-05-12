@@ -8,34 +8,34 @@ import java.awt.event.KeyListener;
 
 public class Pacman extends JPanel implements KeyListener {
 
-    private int x;
-    private int y;
+    private int wiersz;
+    private int kolumna;
     private final int width;
     private final int height;
 
     private DefaultTableModel modelTabeli;
 
-    public Pacman(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
+    public Pacman(int wiersz, int kolumna, int width, int height) {
+        this.wiersz = wiersz;
+        this.kolumna = kolumna;
         this.width = width;
         this.height = height;
-        setBounds(x, y, width, height);
-        setOpaque(false);
+        setBackground(Color.YELLOW);
+        setVisible(true);
     }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
+        g.fillRect(wiersz, kolumna, width, height);
     }
 
     public int getX() {
-        return x;
+        return wiersz;
     }
 
     public int getY() {
-        return y;
+        return kolumna;
     }
 
 
@@ -48,12 +48,12 @@ public class Pacman extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent keyEvent) {
         int step = 3;
         switch (keyEvent.getKeyCode()) {
-            case KeyEvent.VK_UP -> y -= step;
-            case KeyEvent.VK_DOWN -> y += step;
-            case KeyEvent.VK_LEFT -> x -= step;
-            case KeyEvent.VK_RIGHT -> x += step;
+            case KeyEvent.VK_UP -> kolumna -= step;
+            case KeyEvent.VK_DOWN -> kolumna += step;
+            case KeyEvent.VK_LEFT -> wiersz -= step;
+            case KeyEvent.VK_RIGHT -> wiersz += step;
         }
-        setBounds(x, y, width, height);
+        setBounds(wiersz, kolumna, width, height);
     }
 
     @Override
