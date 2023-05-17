@@ -20,10 +20,10 @@ public class Gra extends JFrame {
         if (liczbaWierszy >= 10 && liczbaWierszy <= 100 && liczbaKolumn >= 10 && liczbaKolumn <= 100) {
             oknoWyboruRozmiaru.dispose();
 
-            File pacmanIcon = new File(getClass().getResource("pacman.gif").getFile());
+            File pacmanIcon = new File(getClass().getResource("1.gif").getFile());
             Pacman pacman = new Pacman(pacmanIcon, 25, 25);
             Plansza plansza = new Plansza(liczbaKolumn, liczbaWierszy, pacman);
-            plansza.setValueAt(pacman, 25, 25);
+            plansza.setValueAt(pacman, liczbaKolumn/2, liczbaWierszy/2);
 
             setLayout(null);
             setBounds(0, 0, liczbaWierszy * 11, liczbaKolumn * 11);
