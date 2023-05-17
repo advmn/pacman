@@ -71,17 +71,23 @@ public class GameModel extends AbstractTableModel {
         }
         int newPacmanRow = pacmanRow + dy;
         int newPacmanCol = pacmanCol + dx;
-        if (newPacmanRow >= 0 && newPacmanRow < grid.length && newPacmanCol >= 0 && newPacmanCol < grid[0].length) {
-            if (!grid[newPacmanRow][newPacmanCol].equals(1)) {
-                if (grid[newPacmanRow][newPacmanCol].equals(0)) {
-                    points++;
-                    System.out.println("Points: " + points);
-                }
-                grid[pacmanRow][pacmanCol] = 3; // Path Pacman has walked on
-                grid[newPacmanRow][newPacmanCol] = 2;
-                fireTableDataChanged();
-            }
+
+        if (newPacmanRow < 0 || newPacmanRow >= grid[0].length || newPacmanCol < 0 || newPacmanCol >= grid.length) {
+            moveGhost(4);
+            moveGhost(5);
+            return;
         }
+
+        if (!grid[newPacmanRow][newPacmanCol].equals(1)) {
+            if (grid[newPacmanRow][newPacmanCol].equals(0)) {
+                points++;
+                System.out.println("Points: " + points);
+            }
+            grid[pacmanRow][pacmanCol] = 3; // Path Pacman has walked on
+            grid[newPacmanRow][newPacmanCol] = 2;
+            fireTableDataChanged();
+        }
+
         // Check if Pacman has been caught by a ghost
         if (grid[newPacmanRow][newPacmanCol].equals(4) || grid[newPacmanRow][newPacmanCol].equals(5)) {
             System.out.println("Game over! Final score: " + points);
