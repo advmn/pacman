@@ -46,13 +46,13 @@ public class MazeGenerator {
 
     private void makeRandomWallsEmpty() {
         int totalCells = rows * cols;
-        double emptyCellsTarget = totalCells / 5.5; // 25% of total cells
+        double emptyCellsTarget = totalCells / 5.5;
 
         while (emptyCellsTarget > 0) {
             int x = random.nextInt(cols);
             int y = random.nextInt(rows);
 
-            // If the selected cell is a wall, make it empty
+
             if (maze[y][x] == 1) {
                 maze[y][x] = 0;
                 emptyCellsTarget--;

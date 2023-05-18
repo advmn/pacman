@@ -8,8 +8,8 @@ import java.awt.event.KeyEvent;
 public class Main {
     public void run() {
         SwingUtilities.invokeLater(() -> {
-            int rows = 50;
-            int cols = 50;
+            int rows = 20;
+            int cols = 20;
 
             GameModel model = new GameModel(rows, cols);
             GameView view = new GameView(model);
@@ -18,7 +18,7 @@ public class Main {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.getContentPane().add(view);
             frame.pack();
-            frame.setLocationRelativeTo(null); // center the window
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
             frame.addKeyListener(new KeyAdapter() {
@@ -47,4 +47,3 @@ public class Main {
         });
     }
 }
-

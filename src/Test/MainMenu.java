@@ -1,7 +1,5 @@
 package Test;
 
-import Test.Main;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,7 +10,7 @@ public class MainMenu extends JFrame {
 
     public MainMenu() {
         setTitle("Pacman Game");
-        setSize(300, 200);
+        setSize(300, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -21,12 +19,15 @@ public class MainMenu extends JFrame {
         exitButton = createButton("Exit");
 
         startGameButton.addActionListener(e -> {
-            Main main = new Main();
-            main.run();
+            GameConfigMenu configMenu = new GameConfigMenu();
+            configMenu.setVisible(true);
             dispose();
         });
 
-        highScoresButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "High Scores"));
+        highScoresButton.addActionListener(e -> {
+            HighScoresMenu highScoresMenu = new HighScoresMenu();
+            highScoresMenu.setVisible(true);
+        });
 
         exitButton.addActionListener(e -> System.exit(0));
 
@@ -41,7 +42,7 @@ public class MainMenu extends JFrame {
         JButton button = new JButton(text);
         button.setBackground(Color.BLACK);
         button.setForeground(Color.YELLOW);
-        button.setFont(new Font("Arial", Font.BOLD, 18));
+        button.setFont(new Font("Arial", Font.BOLD, 24));
         button.setFocusPainted(false);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
         return button;
@@ -54,4 +55,3 @@ public class MainMenu extends JFrame {
         });
     }
 }
-

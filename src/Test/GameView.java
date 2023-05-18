@@ -28,10 +28,10 @@ public class GameView extends JPanel {
         scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Set the preferred size of scrollPane according to the total size of the table
+
         scrollPane.setPreferredSize(new Dimension(cellSize * model.getColumnCount(), cellSize * model.getRowCount()));
 
-        // Custom cell rendering to display different colors for walls, Pacman, and empty cells
+
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
@@ -40,31 +40,31 @@ public class GameView extends JPanel {
                 switch (cellValue) {
                     case 0:
                         setBackground(Color.BLACK);
-                        setForeground(Color.BLACK); // Set font color same as background
+                        setForeground(Color.BLACK);
                         break;
                     case 1:
                         setBackground(Color.YELLOW);
-                        setForeground(Color.YELLOW); // Set font color same as background
+                        setForeground(Color.YELLOW);
                         break;
                     case 2:
                         setBackground(Color.BLUE);
-                        setForeground(Color.BLUE); // Set font color same as background
+                        setForeground(Color.BLUE);
                         break;
                     case 3:
                         setBackground(Color.GREEN);
-                        setForeground(Color.GREEN); // Set font color same as background
+                        setForeground(Color.GREEN);
                         break;
                     case 4:
                         setBackground(Color.PINK);
-                        setForeground(Color.PINK); // Set font color same as background
+                        setForeground(Color.PINK);
                         break;
                     case 5:
                         setBackground(Color.WHITE);
-                        setForeground(Color.WHITE); // Set font color same as background
+                        setForeground(Color.WHITE);
                         break;
                     case 6:
-                        setBackground(Color.WHITE);
-                        setForeground(Color.WHITE);
+                        setBackground(Color.ORANGE);
+                        setForeground(Color.ORANGE);
 
                     default:
                         setBackground(table.getBackground());

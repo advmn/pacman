@@ -2,14 +2,19 @@ package Test;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Random;
+import javax.swing.SwingUtilities;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class GameModel extends AbstractTableModel {
     private Object[][] grid;
     private int points;
     private Random random = new Random();
-    private int moveCounter1 = 0;  // Counter for first ghost
-    private int moveCounter2 = 0;  // Counter for second ghost
-    private int boostCounter = 0;  // Counter for boost mode
+    private boolean boostActive;
+    private int boostMoveCounter;
+    private int moveCounter1;
+    private int moveCounter2;
 
     public GameModel(int rows, int cols) {
         MazeGenerator mazeGenerator = new MazeGenerator(rows, cols);
@@ -17,28 +22,17 @@ public class GameModel extends AbstractTableModel {
         grid = new Object[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                grid[i][j] = maze[i][j] == 0 ? 0 : 1; // 1 for wall, 0 for path
+                grid[i][j] = maze[i][j] == 0 ? 0 : 1;
             }
         }
-        grid[rows / 2][cols / 2] = 2; // Initial position of Pacman
-        // Spawn ghosts at random positions
-        while (true) {
-            int ghostRow = random.nextInt(rows);
-            int ghostCol = random.nextInt(cols);
-            if (grid[ghostRow][ghostCol].equals(0)) {
-                grid[ghostRow][ghostCol] = 4;
-                break;
-            }
-        }
-        while (true) {
-            int ghostRow = random.nextInt(rows);
-            int ghostCol = random.nextInt(cols);
-            if (grid[ghostRow][ghostCol].equals(0)) {
-                grid[ghostRow][ghostCol] = 5;
-                break;
-            }
-        }
+
+        grid[rows / 2][cols / 2] = 2;
+        spawnGhosts(2);
         points = 0;
+        boostActive = false;
+        boostMoveCounter = 0;
+        moveCounter1 = 0;
+        moveCounter2 = 0;
     }
 
     @Override
@@ -56,8 +50,8 @@ public class GameModel extends AbstractTableModel {
         return grid[rowIndex][columnIndex];
     }
 
-    public void movePacman(int dx, int dy) {
 
+    public void movePacman(int dx, int dy) {
         int pacmanRow = -1;
         int pacmanCol = -1;
         for (int i = 0; i < grid.length; i++) {
@@ -71,56 +65,49 @@ public class GameModel extends AbstractTableModel {
         }
         int newPacmanRow = pacmanRow + dy;
         int newPacmanCol = pacmanCol + dx;
-
-        if (newPacmanRow < 0 || newPacmanRow >= grid[0].length || newPacmanCol < 0 || newPacmanCol >= grid.length) {
-            moveGhost(4);
-            moveGhost(5);
-            return;
-        }
-
-        if (!grid[newPacmanRow][newPacmanCol].equals(1)) {
+        if (newPacmanRow >= 0 && newPacmanRow < grid.length && newPacmanCol >= 0 && newPacmanCol < grid[0].length) {
             if (grid[newPacmanRow][newPacmanCol].equals(0)) {
                 points++;
-                System.out.println("Points: " + points);
-            }
-            grid[pacmanRow][pacmanCol] = 3; // Path Pacman has walked on
-            grid[newPacmanRow][newPacmanCol] = 2;
-            fireTableDataChanged();
-        }
-
-        // Check if Pacman has been caught by a ghost
-        if (grid[newPacmanRow][newPacmanCol].equals(4) || grid[newPacmanRow][newPacmanCol].equals(5)) {
-            System.out.println("Game over! Final score: " + points);
-            System.exit(0);
-        }
-
-        // If Pacman steps on a boost point
-        if (grid[newPacmanRow][newPacmanCol].equals(6)) {
-            boostCounter = 5;  // Activate boost mode for 5 moves
-            System.out.println("Boost activated!");
-        }
-
-        // If boost mode is on
-        if (boostCounter > 0) {
-            int nextPacmanRow = newPacmanRow + dy;
-            int nextPacmanCol = newPacmanCol + dx;
-            if (nextPacmanRow >= 0 && nextPacmanRow < grid.length && nextPacmanCol >= 0 && nextPacmanCol < grid[0].length) {
-                if (!grid[nextPacmanRow][nextPacmanCol].equals(1)) {
-                    if (grid[nextPacmanRow][nextPacmanCol].equals(0)) {
-                        points++;
-                        System.out.println("Points: " + points);
+                grid[pacmanRow][pacmanCol] = 3;
+                grid[newPacmanRow][newPacmanCol] = 2;
+                if (isBoostActive()) {
+                    int boostedPacmanRow = newPacmanRow + dy;
+                    int boostedPacmanCol = newPacmanCol + dx;
+                    if (boostedPacmanRow >= 0 && boostedPacmanRow < grid.length && boostedPacmanCol >= 0 && boostedPacmanCol < grid[0].length) {
+                        if (grid[boostedPacmanRow][boostedPacmanCol].equals(0)) {
+                            points++;
+                            grid[newPacmanRow][newPacmanCol] = 3;
+                            grid[boostedPacmanRow][boostedPacmanCol] = 2;
+                            newPacmanRow = boostedPacmanRow;
+                            newPacmanCol = boostedPacmanCol;
+                        }
                     }
-                    grid[newPacmanRow][newPacmanCol] = 3;  // Path Pacman has walked on
-                    grid[nextPacmanRow][nextPacmanCol] = 2;
-                    fireTableDataChanged();
-                    boostCounter--;  // Decrease boost mode counter
+                    boostMoveCounter++;
+                    if (boostMoveCounter >= 5) {
+                        setBoostActive(false);
+                        boostMoveCounter = 0;
+                    }
                 }
+                fireTableDataChanged();
+            } else if (grid[newPacmanRow][newPacmanCol].equals(3)) {
+                grid[pacmanRow][pacmanCol] = 3;
+                grid[newPacmanRow][newPacmanCol] = 2;
+                fireTableDataChanged();
+            } else if (grid[newPacmanRow][newPacmanCol].equals(6)) {
+                setBoostActive(true);
+                grid[pacmanRow][pacmanCol] = 3;
+                grid[newPacmanRow][newPacmanCol] = 2;
+                fireTableDataChanged();
+            } else if (grid[newPacmanRow][newPacmanCol].equals(4) || grid[newPacmanRow][newPacmanCol].equals(5)) {
+                endGame();
             }
         }
-
         moveGhost(4);
         moveGhost(5);
     }
+
+
+
 
     private void moveGhost(int ghostNumber) {
         int ghostRow = -1;
@@ -134,42 +121,74 @@ public class GameModel extends AbstractTableModel {
                 }
             }
         }
+
         int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
         int newDirection = random.nextInt(4);
         int newGhostRow = ghostRow + directions[newDirection][0];
         int newGhostCol = ghostCol + directions[newDirection][1];
         if (newGhostRow >= 0 && newGhostRow < grid.length && newGhostCol >= 0 && newGhostCol < grid[0].length) {
             if (!grid[newGhostRow][newGhostCol].equals(1) && !grid[newGhostRow][newGhostCol].equals(4) && !grid[newGhostRow][newGhostCol].equals(5)) {
-                if (ghostNumber == 4) {
-                    moveCounter1++;
-                    if (moveCounter1 >= 10) {
-                        grid[ghostRow][ghostCol] = 6;  // Ghost leaves a boost point
-                        moveCounter1 = 0;
-                    } else {
-                        grid[ghostRow][ghostCol] = 0;  // Ghost leaves a path
+                if (grid[newGhostRow][newGhostCol].equals(2)) {
+                    endGame();
+                } else {
+                    if (ghostNumber == 4) {
+                        moveCounter1++;
+                        if (moveCounter1 >= 10) {
+                            grid[ghostRow][ghostCol] = grid[ghostRow][ghostCol].equals(3) ? 3 : 6;
+                            moveCounter1 = 0;
+                        } else {
+                            grid[ghostRow][ghostCol] = grid[ghostRow][ghostCol].equals(3) ? 3 : 0;
+                        }
+                    } else if (ghostNumber == 5) {
+                        moveCounter2++;
+                        if (moveCounter2 >= 10) {
+                            grid[ghostRow][ghostCol] = grid[ghostRow][ghostCol].equals(3) ? 3 : 6;
+                            moveCounter2 = 0;
+                        } else {
+                            grid[ghostRow][ghostCol] = grid[ghostRow][ghostCol].equals(3) ? 3 : 0;
+                        }
                     }
-                } else if (ghostNumber == 5) {
-                    moveCounter2++;
-                    if (moveCounter2 >= 10) {
-                        grid[ghostRow][ghostCol] = 6;  // Ghost leaves a boost point
-                        moveCounter2 = 0;
-                    } else {
-                        grid[ghostRow][ghostCol] = 0;  // Ghost leaves a path
-                    }
+                    grid[newGhostRow][newGhostCol] = ghostNumber;
+                    fireTableDataChanged();
                 }
-                grid[newGhostRow][newGhostCol] = ghostNumber;
-                fireTableDataChanged();
             }
         }
     }
+
+    private void spawnGhosts(int numberOfGhosts) {
+        for (int i = 0; i < numberOfGhosts; i++) {
+            int row, col;
+            do {
+                row = random.nextInt(grid.length);
+                col = random.nextInt(grid[0].length);
+            } while (grid[row][col].equals(1) || grid[row][col].equals(2));
+            grid[row][col] = i + 4;
+        }
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        grid[rowIndex][columnIndex] = aValue;
+        fireTableCellUpdated(rowIndex, columnIndex);
+    }
+
+    public boolean isBoostActive() {
+        return boostActive;
+    }
+
+    public void setBoostActive(boolean boostActive) {
+        this.boostActive = boostActive;
+    }
+
+    private void endGame() {
+        System.out.println("Game Over! Your score: " + points);
+
+        SwingUtilities.invokeLater(() -> {
+            GameOverMenu gameOverMenu = new GameOverMenu(points);
+            gameOverMenu.setVisible(true);
+        });
+    }
 }
-
-
-
-
-
-
-
 
 
 

@@ -34,6 +34,7 @@ public class GameCellRenderer extends DefaultTableCellRenderer {
                 break;
             case 6:
                 cell.setBackground(Color.ORANGE);
+                cell.setForeground(Color.ORANGE);
             default:
                 cell.setBackground(Color.WHITE);
                 break;
