@@ -1,68 +1,34 @@
 package Menu;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.File;
+import java.net.MalformedURLException;
 
-public class Pacman extends JPanel implements KeyListener {
+public class Pacman extends ImageIcon {
 
-    private int x;
-    private int y;
-    private final int width;
-    private final int height;
+    private int wiersz;
+    private int kolumna;
 
-    private DefaultTableModel modelTabeli;
-
-    public Pacman(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        setBounds(x, y, width, height);
-        setOpaque(false);
-    }
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
+    public Pacman(File image, int wiersz, int kolumna) throws MalformedURLException {
+        super(image.toURL());
+        this.wiersz = wiersz;
+        this.kolumna = kolumna;
     }
 
-    public int getX() {
-        return x;
+    public int getWiersz() {
+        return wiersz;
     }
 
-    public int getY() {
-        return y;
+    public int getKolumna() {
+        return kolumna;
     }
 
-
-    @Override
-    public void keyTyped(KeyEvent keyEvent) {
-
+    public void setWiersz(int wiersz) {
+        this.wiersz = wiersz;
     }
 
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-        int step = 3;
-        switch (keyEvent.getKeyCode()) {
-            case KeyEvent.VK_UP -> y -= step;
-            case KeyEvent.VK_DOWN -> y += step;
-            case KeyEvent.VK_LEFT -> x -= step;
-            case KeyEvent.VK_RIGHT -> x += step;
-        }
-        setBounds(x, y, width, height);
+    public void setKolumna(int kolumna) {
+        this.kolumna = kolumna;
     }
-
-    @Override
-    public void keyReleased(KeyEvent keyEvent) {
-
-
-    }
-
-
-
-    }
+}
 
