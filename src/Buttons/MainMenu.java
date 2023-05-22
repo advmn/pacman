@@ -1,10 +1,9 @@
-package Test;
+package Buttons;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainMenu extends JFrame {
-    private JButton startGameButton;
     private JButton highScoresButton;
     private JButton exitButton;
 
@@ -14,7 +13,7 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        startGameButton = createButton("Start Game");
+        JButton startGameButton = createButton("Start Game");
         highScoresButton = createButton("High Scores");
         exitButton = createButton("Exit");
 

@@ -1,4 +1,6 @@
-package Test;
+package Aesthetics;
+
+import Board.GameModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

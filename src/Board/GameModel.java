@@ -1,11 +1,10 @@
-package Test;
+package Board;
+
+import Buttons.GameOverMenu;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Random;
 import javax.swing.SwingUtilities;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 public class GameModel extends AbstractTableModel {
     private Object[][] grid;
@@ -27,7 +26,7 @@ public class GameModel extends AbstractTableModel {
         }
 
         grid[rows / 2][cols / 2] = 2;
-        spawnGhosts(2);
+        spawnGhosts();
         points = 0;
         boostActive = false;
         boostMoveCounter = 0;
@@ -155,8 +154,8 @@ public class GameModel extends AbstractTableModel {
         }
     }
 
-    private void spawnGhosts(int numberOfGhosts) {
-        for (int i = 0; i < numberOfGhosts; i++) {
+    private void spawnGhosts() {
+        for (int i = 0; i < 2; i++) {
             int row, col;
             do {
                 row = random.nextInt(grid.length);
@@ -187,6 +186,10 @@ public class GameModel extends AbstractTableModel {
             GameOverMenu gameOverMenu = new GameOverMenu(points);
             gameOverMenu.setVisible(true);
         });
+    }
+
+    public int getPoints() {
+        return points;
     }
 }
 

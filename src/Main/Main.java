@@ -1,5 +1,8 @@
-package Test;
+package Main;
 
+
+import Board.GameModel;
+import Aesthetics.GameView;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
@@ -25,18 +28,10 @@ public class Main {
                 @Override
                 public void keyPressed(KeyEvent e) {
                     switch (e.getKeyCode()) {
-                        case KeyEvent.VK_UP:
-                            model.movePacman(0, -1);
-                            break;
-                        case KeyEvent.VK_DOWN:
-                            model.movePacman(0, 1);
-                            break;
-                        case KeyEvent.VK_LEFT:
-                            model.movePacman(-1, 0);
-                            break;
-                        case KeyEvent.VK_RIGHT:
-                            model.movePacman(1, 0);
-                            break;
+                        case KeyEvent.VK_UP -> model.movePacman(0, -1);
+                        case KeyEvent.VK_DOWN -> model.movePacman(0, 1);
+                        case KeyEvent.VK_LEFT -> model.movePacman(-1, 0);
+                        case KeyEvent.VK_RIGHT -> model.movePacman(1, 0);
                     }
                     if (e.isControlDown() && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_Q) {
                         System.exit(0);

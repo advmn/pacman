@@ -1,4 +1,4 @@
-package Test;
+package Board;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

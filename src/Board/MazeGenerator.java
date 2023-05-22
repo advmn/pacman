@@ -1,4 +1,4 @@
-package Test;
+package Board;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -51,8 +51,6 @@ public class MazeGenerator {
         while (emptyCellsTarget > 0) {
             int x = random.nextInt(cols);
             int y = random.nextInt(rows);
-
-
             if (maze[y][x] == 1) {
                 maze[y][x] = 0;
                 emptyCellsTarget--;

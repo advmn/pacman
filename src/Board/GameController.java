@@ -1,7 +1,6 @@
-package Test;
+package Board;
 
-import javax.swing.*;
-import java.awt.*;
+import Aesthetics.GameView;
 
 public class GameController {
     private GameModel model;
